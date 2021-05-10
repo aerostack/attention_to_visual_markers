@@ -1,0 +1,30 @@
+<!-- Launches: qr_code_localizer -->
+<launch>
+    <!-- master tag is only obeyed in the top-level file (not in includes)
+    <master>
+    </master>-->
+    <arg name="drone_id_namespace"  default="drone11" />
+    <arg name="my_stack_directory" default="$(env AEROSTACK_STACK)" />
+
+    <arg name="qr_interpretation_topic" default="qr_interpretation" />
+    <arg name="camera_topic" default="camera_front/image_raw" />
+    <arg name="camera_info_topic" default="camera_front/camera_info" />
+    <arg name="estimated_pose_topic" default="self_localization" />
+    <arg name="qr_position_topic" default="qr_code_localized" />	
+    	
+    <group ns="$(arg drone_id_namespace)">
+
+    	<param name="~drone_id_namespace" 		value="$(arg drone_id_namespace)"		type="str"   />
+	<param name="~my_stack_directory" 		value="$(arg my_stack_directory)" 	 	type="str"   />
+
+            <!-- Notifications -->
+	<param name="qr_interpretation_topic" value="$(arg qr_interpretation_topic)" type="str" />
+	<param name="camera_topic" value="$(arg camera_topic)" type="str" />
+	<param name="camera_info_topic" value="$(arg camera_info_topic)" type="str" />
+	<param name="estimated_pose_topic" value="$(arg estimated_pose_topic)" type="str" />
+	<param name="qr_position_topic" value="$(arg qr_position_topic)" type="str" />
+
+        <node name="qr_code_localizer" pkg="qr_code_localizer" type="qr_code_localizer" output="screen"/>
+
+    </group>
+</launch>
