@@ -34,9 +34,15 @@
 
 #include "../include/behavior_pay_attention_to_qr_code.h"
 #include <pluginlib/class_list_macros.h>
-namespace attention_to_visual_markers
-{
-BehaviorPayAttentionToQRCode::BehaviorPayAttentionToQRCode() : BehaviorExecutionController()
+
+int main(int argc, char** argv){
+  ros::init(argc, argv, ros::this_node::getName());
+  std::cout << "Node: " << ros::this_node::getName() << " started" << std::endl;
+  BehaviorPayAttentionToQRCode behavior;
+  behavior.start();
+  return 0;
+}
+BehaviorPayAttentionToQRCode::BehaviorPayAttentionToQRCode() : BehaviorExecutionManager()
 {
 setName("pay_attention_to_qr_code"); 
 }
@@ -98,6 +104,3 @@ void BehaviorPayAttentionToQRCode::onDeactivate()
 bool BehaviorPayAttentionToQRCode::checkSituation(){
   return true;
 }
-
-}
-PLUGINLIB_EXPORT_CLASS(attention_to_visual_markers::BehaviorPayAttentionToQRCode, nodelet::Nodelet)

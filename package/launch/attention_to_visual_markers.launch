@@ -33,8 +33,7 @@
              <param name="~behavior_system"                     value="$(arg behavior_system)"                    type="str" />
              <param name="~odometry_str"                        value="$(arg odometry_str)"                       type="str" /> 
             
-       <node pkg="nodelet" type="nodelet" args="manager" name="attention_to_visual_markers_manager" output="screen" />
-       <node pkg="nodelet" type="nodelet" args="load attention_to_visual_markers/BehaviorPayAttentionToQRCode attention_to_visual_markers_manager"
-        name="behavior_pay_attention_to_qr_code" output="screen"/>
+       <node name="behavior_pay_attention_to_qr_code" pkg="attention_to_visual_markers"  type="BehaviorPayAttentionToQRCode"  output="screen"/>
+
   </group>
 </launch>

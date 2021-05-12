@@ -27,9 +27,8 @@ set(ATTENTION_TO_QR_CODE_SOURCE_FILES
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   roscpp
-  nodelet
   std_msgs
-  behavior_execution_controller
+  behavior_execution_manager
   droneMsgsROS
   geometry_msgs
   aerostack_msgs
@@ -49,10 +48,9 @@ catkin_package(
   LIBRARIES ${PROJECT_NAME}
   CATKIN_DEPENDS 
   roscpp 
-  nodelet
   std_msgs
   drone_process
-  behavior_execution_controller
+  behavior_execution_manager
   droneMsgsROS
   geometry_msgs
   aerostack_msgs
@@ -70,12 +68,9 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-## Declare a C++ library
-add_library(attention_to_visual_markers
-  src/source/behavior_pay_attention_to_qr_code.cpp
-)
-target_link_libraries(attention_to_visual_markers ${catkin_LIBRARIES})
-target_link_libraries(attention_to_visual_markers yaml-cpp)
+add_executable(BehaviorPayAttentionToQRCode ${ATTENTION_TO_QR_CODE_SOURCE_DIR}/behavior_pay_attention_to_qr_code.cpp)
+target_link_libraries(BehaviorPayAttentionToQRCode ${catkin_LIBRARIES})
+target_link_libraries(BehaviorPayAttentionToQRCode yaml-cpp)
 if(catkin_EXPORTED_LIBRARIES)
-  add_dependencies(attention_to_visual_markers ${catkin_EXPORTED_LIBRARIES})
+  add_dependencies(BehaviorPayAttentionToQRCode ${catkin_EXPORTED_LIBRARIES})
 endif()

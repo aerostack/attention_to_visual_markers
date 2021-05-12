@@ -42,20 +42,17 @@
 #include <geometry_msgs/Twist.h>
 #include <geometry_msgs/Vector3.h>
 #include "std_srvs/Empty.h"
-#include <droneMsgsROS/AddBelief.h>
-#include <droneMsgsROS/GenerateID.h>
+#include <belief_manager_msgs/AddBelief.h>
+#include <belief_manager_msgs/GenerateID.h>
 #include <droneMsgsROS/QRInterpretation.h>
-#include <droneMsgsROS/RemoveBelief.h>
+#include <belief_manager_msgs/RemoveBelief.h>
 
-#include <behavior_execution_controller.h>
-
-#include <nodelet/nodelet.h>
+#include <BehaviorExecutionManager.h>
 
 #define DEFAULT_DRONE_ID "1"
 #define DEFAULT_REFRESH_RATE "5"
-namespace attention_to_visual_markers
-{
-class BehaviorPayAttentionToQRCode : public BehaviorExecutionController
+
+class BehaviorPayAttentionToQRCode : public BehaviorExecutionManager
 {
 private:
   // Communication variables
@@ -71,7 +68,7 @@ private:
   std::string nspace;
   /*Subscribers & Publishers*/
 
-  // BehaviorExecutionController
+  // BehaviorExecutionManager
   bool checkSituation();
   void checkGoal();
   void checkProgress();
@@ -88,5 +85,4 @@ public:
   ~BehaviorPayAttentionToQRCode();
   inline double getRefreshRate() { return refresh_rate; }
 };
-}
 #endif
