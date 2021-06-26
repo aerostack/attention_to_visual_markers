@@ -1,5 +1,5 @@
 /*!*******************************************************************************************
- *  \file       QrCodeLocalizer.cpp
+ *  \file       QrFeatureExtractor.cpp
  *  \brief      distance measurement implementation file.
  *  \details    This file contains the DistanceMeasurement implementattion of the class.
  *  \authors    Javier Melero Deza
@@ -31,17 +31,17 @@
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ********************************************************************************/
-#include "../include/qr_code_localizer.h"
+#include "../include/qr_feature_extractor.h"
 #include <pluginlib/class_list_macros.h>
 
 
-QrCodeLocalizer::QrCodeLocalizer(){
+QrFeatureExtractor::QrFeatureExtractor(){
 }
 
-QrCodeLocalizer::~QrCodeLocalizer(){
+QrFeatureExtractor::~QrFeatureExtractor(){
 }
 
-void QrCodeLocalizer::ownSetUp(){
+void QrFeatureExtractor::ownSetUp(){
     ros::NodeHandle nh("~");
     nh.param<std::string>("camera_topic", camera_topic_str, "camera_front/image_raw");
     nh.param<std::string>("camera_info_topic", camera_info_topic_str, "camera_front/camera_info");    
@@ -50,22 +50,22 @@ void QrCodeLocalizer::ownSetUp(){
     nh.param<std::string>("qr_position_topic", qr_position_topic_str,  "qr_code_localized");
 
     
-    camera_sub = node_handle.subscribe(camera_topic_str, 1, &QrCodeLocalizer::CameraCallback, this);
-    camera_info_sub = node_handle.subscribe(camera_info_topic_str, 1, &QrCodeLocalizer::CameraInfoCallback, this);
-    pose_sub = node_handle.subscribe(pose_topic_str, 1, &QrCodeLocalizer::PoseCallback, this);
-    qr_code_localized_pub = node_handle.advertise<aerostack_msgs::ListOfQrCodeLocalized>(qr_position_topic_str, 1, true);
-    notification_pub = node_handle.advertise<droneMsgsROS::QRInterpretation>(notification_topic, 1, true);
+    camera_sub = node_handle.subscribe(camera_topic_str, 30, &QrFeatureExtractor::CameraCallback, this);
+    camera_info_sub = node_handle.subscribe(camera_info_topic_str, 30, &QrFeatureExtractor::CameraInfoCallback, this);
+    pose_sub = node_handle.subscribe(pose_topic_str, 1, &QrFeatureExtractor::PoseCallback, this);
+    qr_code_localized_pub = node_handle.advertise<aerostack_msgs::ListOfQrCodeLocalized>(qr_position_topic_str, 30, true);
+    notification_pub = node_handle.advertise<droneMsgsROS::QRInterpretation>(notification_topic, 30, true);
     
 
 }
 
-void QrCodeLocalizer::PoseCallback (const geometry_msgs::PoseStamped &msg){
+void QrFeatureExtractor::PoseCallback (const geometry_msgs::PoseStamped &msg){
     selfPose = msg;
     angles = ToEulerAngles(selfPose.pose.orientation); //Obtain the drone orientation and turn in into radians.
     
 }
 
-void QrCodeLocalizer::CameraCallback (const sensor_msgs::ImageConstPtr &msg){ 
+void QrFeatureExtractor::CameraCallback (const sensor_msgs::ImageConstPtr &msg){ 
 
   mtx.lock();
   try 
@@ -156,9 +156,9 @@ void QrCodeLocalizer::CameraCallback (const sensor_msgs::ImageConstPtr &msg){
 
             float distance = mx/box.size.width + 0.25; // px * m / px (detected width of qr box in image)
             
-            int pixels_xy = box.center.x - width/2; // center x image axis displacement in pixels
+            int pixels_y = box.center.x - width/2; // center x image axis displacement in pixels
             int pixels_z = box.center.y - height/2; // center y image axis displacement in pixels
-            float pixel_value_xy = 0.168/(box.size.width); // how much distance a single pixel represent
+            float pixel_value_y = 0.168/(box.size.width); // how much distance a single pixel represent
             float pixel_value_z = 0.168/(box.size.height); 
             point.code = interpretation.message;
             if (angles.z < 0){
@@ -167,9 +167,8 @@ void QrCodeLocalizer::CameraCallback (const sensor_msgs::ImageConstPtr &msg){
             
             arma::fmat Qr_to_camera (4,1, arma::fill::ones); // Qr to camera position vector
             Qr_to_camera(0, 0) = distance;
-            Qr_to_camera(1, 0) = float(pixels_xy) * pixel_value_xy * -1.0f;
+            Qr_to_camera(1, 0) = float(pixels_y) * pixel_value_y * -1.0f;
             Qr_to_camera(2, 0) = float(pixels_z) * pixel_value_z * -1.0f;
-            std::cout << Qr_to_camera(2, 0) << std::endl;
 
             arma::fmat Drone_to_world (4,4, arma::fill::eye); // Drone to world transformation matrix
             Drone_to_world(0, 0) = cos(angles.z);
@@ -190,14 +189,13 @@ void QrCodeLocalizer::CameraCallback (const sensor_msgs::ImageConstPtr &msg){
                             
           }
       }
-
-
       if(!entered){
         interpretation.message="";
         notification_pub.publish(interpretation);}
       
       else {
         qr_code_localized_pub.publish(list_points);
+        std::cout << list_points.list_of_qr_codes.size() << std::endl;
         list_points.list_of_qr_codes.clear();
       }
 
@@ -214,14 +212,14 @@ void QrCodeLocalizer::CameraCallback (const sensor_msgs::ImageConstPtr &msg){
     }
 }
 
-void QrCodeLocalizer::CameraInfoCallback (const sensor_msgs::CameraInfo &msg){         
+void QrFeatureExtractor::CameraInfoCallback (const sensor_msgs::CameraInfo &msg){         
     camera_info = msg;
-    float size = 0.168; //horizontal length of qr image
-    mx = camera_info.K[0] * size; // focal length (px) * horizontal length (m)
+    float length = 0.168; //horizontal length of qr image
+    mx = camera_info.K[0] * length; // focal length (px) * horizontal length (m)
 }
 
 
-geometry_msgs::Vector3 QrCodeLocalizer::ToEulerAngles(geometry_msgs::Quaternion q) {
+geometry_msgs::Vector3 QrFeatureExtractor::ToEulerAngles(geometry_msgs::Quaternion q) {
 
     // roll (x-axis rotation)
     double sinr_cosp = 2 * (q.w * q.x + q.y * q.z);
@@ -243,7 +241,7 @@ geometry_msgs::Vector3 QrCodeLocalizer::ToEulerAngles(geometry_msgs::Quaternion 
 }
 
 
-void QrCodeLocalizer::ownStart(){
+void QrFeatureExtractor::ownStart(){
     scanner.set_config(ZBAR_NONE, ZBAR_CFG_ENABLE, 0);
 
     // enable qr
@@ -251,11 +249,11 @@ void QrCodeLocalizer::ownStart(){
  
 }
 
-void QrCodeLocalizer::ownRun(){
+void QrFeatureExtractor::ownRun(){
 
 }
 
-void QrCodeLocalizer::ownStop(){
+void QrFeatureExtractor::ownStop(){
 
 }
 

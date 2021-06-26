@@ -1,4 +1,4 @@
-<!-- Launches: qr_code_localizer -->
+<!-- Launches: qr_feature_extractor -->
 <launch>
     <!-- master tag is only obeyed in the top-level file (not in includes)
     <master>
@@ -24,7 +24,7 @@
 	<param name="estimated_pose_topic" value="$(arg estimated_pose_topic)" type="str" />
 	<param name="qr_position_topic" value="$(arg qr_position_topic)" type="str" />
 
-        <node name="qr_code_localizer" pkg="qr_code_localizer" type="qr_code_localizer" output="screen"/>
+        <node name="qr_feature_extractor" pkg="qr_feature_extractor" type="qr_feature_extractor" output="screen"/>
 
     </group>
 </launch>

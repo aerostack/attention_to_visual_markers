@@ -1,5 +1,5 @@
-#ifndef QR_CODE_LOCALIZER_H
-#define QR_CODE_LOCALIZER_H
+#ifndef QR_FEATURE_EXTRACTOR_H
+#define QR_FEATURE_EXTRACTOR_H
 
 #include <string>
 #include <queue>
@@ -43,12 +43,12 @@
 
 using namespace zbar;
 
-class QrCodeLocalizer : public RobotProcess
+class QrFeatureExtractor : public RobotProcess
 {
 
   public:
-    QrCodeLocalizer();
-    ~QrCodeLocalizer();
+    QrFeatureExtractor();
+    ~QrFeatureExtractor();
       void ownSetUp();
       void ownRun();
       void ownStop();

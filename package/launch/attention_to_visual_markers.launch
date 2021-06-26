@@ -15,7 +15,7 @@
     <arg name="qr_interpretation_topic"            default="qr_interpretation" />
     <arg name="interface_sensor_front_camera"      default="camera/front/image_raw" />   
 
-    <include file="$(find qr_code_localizer)/launch/qr_code_localizer.launch">
+    <include file="$(find qr_feature_extractor)/launch/qr_feature_extractor.launch">
       <arg name="drone_id_namespace"  value="$(arg namespace)" />
     </include>
    

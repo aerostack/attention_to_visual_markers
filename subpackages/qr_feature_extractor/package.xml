@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>qr_code_localizer</name>
+  <name>qr_feature_extractor</name>
   <version>0.0.0</version>
-  <description>The qr_code_localizer package</description>
+  <description>The qr_feature_extractor package</description>
 
   <maintainer email="rafa@todo.todo">rafa</maintainer>
 

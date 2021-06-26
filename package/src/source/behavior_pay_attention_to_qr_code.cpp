@@ -39,6 +39,7 @@ int main(int argc, char** argv){
   ros::init(argc, argv, ros::this_node::getName());
   std::cout << "Node: " << ros::this_node::getName() << " started" << std::endl;
   BehaviorPayAttentionToQRCode behavior;
+  ros::Rate rate(30);
   behavior.start();
   return 0;
 }
