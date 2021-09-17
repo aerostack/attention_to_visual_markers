@@ -7,8 +7,7 @@
 #include <cmath>
 // ROS
 #include <ros/ros.h>
-#include "cv.h"
-#include "highgui.h"
+
 #include <sensor_msgs/Image.h>
 #include <iostream>
 #include <armadillo>    
