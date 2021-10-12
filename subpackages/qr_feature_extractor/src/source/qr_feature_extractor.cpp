@@ -43,8 +43,9 @@ QrFeatureExtractor::~QrFeatureExtractor(){
 
 void QrFeatureExtractor::ownSetUp(){
     ros::NodeHandle nh("~");
-    nh.param<std::string>("camera_topic", camera_topic_str, "camera_front/image_raw");
-    nh.param<std::string>("camera_info_topic", camera_info_topic_str, "camera_front/camera_info");    
+
+    nh.param<std::string>("camera_topic", camera_topic_str, "usb_cam/image_raw");
+    nh.param<std::string>("camera_info_topic", camera_info_topic_str, "usb_cam/camera_info");
     nh.param<std::string>("estimated_pose_topic", pose_topic_str, "self_localization/pose");
     nh.param<std::string>("qr_interpretation_topic", notification_topic,  "qr_interpretation");
     nh.param<std::string>("qr_position_topic", qr_position_topic_str,  "qr_code_localized");

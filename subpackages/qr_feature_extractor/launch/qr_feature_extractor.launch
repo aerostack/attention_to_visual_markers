@@ -7,8 +7,8 @@
     <arg name="my_stack_directory" default="$(env AEROSTACK_STACK)" />
 
     <arg name="qr_interpretation_topic" default="qr_interpretation" />
-    <arg name="camera_topic" default="camera_front/image_raw" />
-    <arg name="camera_info_topic" default="camera_front/camera_info" />
+    <arg name="camera_topic" default="usb_cam/image_raw" />
+    <arg name="camera_info_topic" default="usb_cam/camera_info" />
     <arg name="estimated_pose_topic" default="self_localization" />
     <arg name="qr_position_topic" default="qr_code_localized" />	
     	

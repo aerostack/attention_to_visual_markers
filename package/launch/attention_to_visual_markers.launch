@@ -13,7 +13,7 @@
     <arg name="behavior_system"                    default="attention_to_visual_markers" />
     <arg name="odometry_str"                       default="change_self_localization_mode_to_odometry" />
     <arg name="qr_interpretation_topic"            default="qr_interpretation" />
-    <arg name="interface_sensor_front_camera"      default="camera/front/image_raw" />   
+    <arg name="interface_sensor_front_camera"      default="usb_cam/image_raw" />   
 
     <include file="$(find qr_feature_extractor)/launch/qr_feature_extractor.launch">
       <arg name="drone_id_namespace"  value="$(arg namespace)" />
