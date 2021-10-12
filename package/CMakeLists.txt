@@ -32,6 +32,7 @@ find_package(catkin REQUIRED COMPONENTS
   droneMsgsROS
   geometry_msgs
   aerostack_msgs
+  belief_manager_msgs
 )
 
 ###################################
@@ -54,6 +55,7 @@ catkin_package(
   droneMsgsROS
   geometry_msgs
   aerostack_msgs
+  belief_manager_msgs
   DEPENDS yaml-cpp
 )
 
