@@ -50,7 +50,7 @@
 #include <BehaviorExecutionManager.h>
 
 #define DEFAULT_DRONE_ID "1"
-#define DEFAULT_REFRESH_RATE "5"
+#define DEFAULT_REFRESH_RATE "50"
 
 class BehaviorPayAttentionToQRCode : public BehaviorExecutionManager
 {
